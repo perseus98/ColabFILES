@@ -1,0 +1,418 @@
+		================================================================================================================
+    				====::: PLEASE REFER THE SOURCE LINK OF RESPECTIVE MODEL FOR DESCRIPTIVE INFO :::====
+		================================================================================================================
+(PLEASE OPEN WITH SUBLIME FOR BEST FORMMETED DOC)
+
+CONTENT INDEX: 
+
+	MODELS:
+		1) XGBoost
+		2) LogisticRegression
+		3) LinearDiscriminantAnalysis
+		4) k-Nearest Neighbors
+		5) DecisionTreeClassifier
+		6) RandomForestClassifier
+		7) SupportVectorClassification(SVC)
+		8) Naive Bayes
+
+
+
+
+1) XGBoost:-
+
+  (SOURCE: https://xgboost.readthedocs.io/en/latest/parameter.html )
+
+	-> General Parameters:
+		booster [default= gbtree ]
+		silent [default=0] [Deprecated]
+		verbosity [default=1]
+		nthread [default to maximum number of threads available if not set]
+		disable_default_eval_metric [default=0]
+		num_pbuffer [set automatically by XGBoost, no need to be set by user]
+		num_feature [set automatically by XGBoost, no need to be set by user]
+
+	-> Parameters for Tree Booster
+		eta [default=0.3, alias: learning_rate]
+			>>range: [0,1]
+		gamma [default=0, alias: min_split_loss]
+			>>range: [0,∞]
+		max_depth [default=6]
+			>>range: [0,∞] (0 is only accepted in lossguided growing policy when tree_method is set as hist)
+		min_child_weight [default=1]
+			>>range: [0,∞]	
+		max_delta_step [default=0]
+			>>range: [0,∞]	
+		subsample [default=1]	
+			>>range: (0,1]
+		colsample_bytree, colsample_bylevel, colsample_bynode [default=1]	
+			colsample_by* parameters work cumulatively. For instance, the combination {'colsample_bytree':0.5, 'colsample_bylevel':0.5, 'colsample_bynode':0.5} with 64 features will leave 8 features to choose from at each split.
+		lambda [default=1, alias: reg_lambda]
+		alpha [default=0, alias: reg_alpha]	
+		tree_method string [default= auto]
+			Choices: auto, exact, approx, hist, gpu_hist
+		sketch_eps [default=0.03]
+			>>range: (0, 1)
+		scale_pos_weight [default=1]
+		updater [default= grow_colmaker,prune]	
+		refresh_leaf [default=1]	
+		process_type [default= default]
+		grow_policy [default= depthwise]
+		max_leaves [default=0]
+		max_bin, [default=256]
+		predictor, [default=``cpu_predictor``]
+		num_parallel_tree, [default=1]
+
+	-> Additional parameters for Dart Booster (booster=dart)
+		sample_type [default= uniform],
+		normalize_type [default= tree],
+		rate_drop [default=0.0],
+		one_drop [default=0],
+		skip_drop [default=0.0],
+			>>range: [0.0, 1.0],
+
+	-> Parameters for Linear Booster (booster=gblinear)
+		lambda [default=0, alias: reg_lambda]
+		alpha [default=0, alias: reg_alpha]
+		updater [default= shotgun]
+		feature_selector [default= cyclic]
+		top_k [default=0]
+
+	-> Parameters for Tweedie Regression (objective=reg:tweedie)	
+		tweedie_variance_power [default=1.5]
+		>> Parameter that controls the variance of the Tweedie distribution var(y) ~ E(y)^tweedie_variance_power
+		>> range: (1,2)
+		>> Set closer to 2 to shift towards a gamma distribution
+		>> Set closer to 1 to shift towards a Poisson distribution.
+
+	-> Learning Task Parameters	
+		objective [default=reg:squarederror]
+			reg:squarederror, reg:squaredlogerror, reg:logistic, binary:logistic, binary:logitraw, binary:hinge, count:poisson, survival:cox:, multi:softmax, multi:softprob, rank:pairwise, rank:ndcg, rank:map, reg:gamma, reg:tweedie, base_score [default=0.5],
+		eval_metric [default according to objective]
+			rmse, rmsle, mae, logloss, error,  error@t, merror, mlogloss, auc, aucpr, ndcg, map, ndcg@n, map@n, ndcg-, map-, ndcg@n-, map@n-, poisson-nloglik, gamma-nloglik, cox-nloglik, gamma-deviance, tweedie-nloglik
+		seed [default=0]
+
+	-> Command Line Parameters			
+		num_round, data, test:data, save_period [default=0],task [default= train],train,pred,eval,dump,model_in [default=NULL],model_out [default=NULL],model_dir [default= models/],dump_format [default= text],name_dump [default= dump.txt],name_pred [default= pred.txt],pred_margin [default=0]
+
+
+
+
+
+2) LogisticRegression:-
+
+	(SOURCE: https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html )
+
+	SAMPLE:  LogisticRegression(penalty=’l2’, dual=False, tol=0.0001, C=1.0, fit_intercept=True, intercept_scaling=1, class_weight=None, random_state=None, solver=’warn’, max_iter=100, multi_class=’warn’, verbose=0, warm_start=False, n_jobs=None, l1_ratio=None)
+	
+	Parameters:  NOTE: -> regularization is applied by default,
+
+				penalty : str, ‘l1’, ‘l2’, ‘elasticnet’ or ‘none’, optional (default=’l2’),
+				dual : bool, optional (default=False),
+				tol : float, optional (default=1e-4),
+				C : float, optional (default=1.0),
+				fit_intercept : bool, optional (default=True),
+				intercept_scaling : float, optional (default=1),
+				class_weight : dict or ‘balanced’, optional (default=None),
+				random_state : int, RandomState instance or None, optional (default=None),
+				solver : str, {‘newton-cg’, ‘lbfgs’, ‘liblinear’, ‘sag’, ‘saga’}, optional (default=’liblinear’),
+				max_iter : int, optional (default=100),
+				multi_class : str, {‘ovr’, ‘multinomial’, ‘auto’}, optional (default=’ovr’),
+				verbose : int, optional (default=0),
+				( source: https://stackoverflow.com/questions/47902295/what-is-the-use-of-verbose-in-keras-while-validating-the-model )
+								{	verbose=0 will show you nothing (silent)
+									verbose=1 will show you an animated progress bar
+									verbose=2 will just mention the number of epoch
+									}
+				warm_start : bool, optional (default=False),
+				n_jobs : int or None, optional (default=None),
+				l1_ratio : float or None, optional (default=None)
+
+	Attributes:	
+				classes_ : array, shape (n_classes, )
+				coef_ : array, shape (1, n_features) or (n_classes, n_features)
+				intercept_ : array, shape (1,) or (n_classes,)
+				n_iter_ : array, shape (n_classes,) or (1, )		
+
+	Examples
+				>>> from sklearn.datasets import load_iris
+				>>> from sklearn.linear_model import LogisticRegression
+				>>> X, y = load_iris(return_X_y=True)
+				>>> clf = LogisticRegression(random_state=0, solver='lbfgs',multi_class='multinomial').fit(X, y)
+				>>> clf.predict(X[:2, :])
+				array([0, 0])
+				>>> clf.predict_proba(X[:2, :]) 
+				array([[9.8...e-01, 1.8...e-02, 1.4...e-08],
+				[9.7...e-01, 2.8...e-02, ...e-08]])
+				>>> clf.score(X, y)
+				0.97...
+
+
+
+
+3) LinearDiscriminantAnalysis:-
+	
+	SOURCE: https://scikit-learn.org/stable/modules/generated/sklearn.discriminant_analysis.LinearDiscriminantAnalysis.html
+
+	SAMPLE: LinearDiscriminantAnalysis(solver=’svd’, shrinkage=None, priors=None, n_components=None, store_covariance=False, tol=0.0001)
+
+	Parameters:	
+		solver : string, optional
+			‘svd’: Singular value decomposition (default). Does not compute the covariance matrix, therefore this solver is recommended for data with a large number of features.
+			‘lsqr’: Least squares solution, can be combined with shrinkage.
+			‘eigen’: Eigenvalue decomposition, can be combined with shrinkage.
+		shrinkage : string or float, optional
+			Shrinkage parameter, possible values:
+			None: no shrinkage (default).
+			‘auto’: automatic shrinkage using the Ledoit-Wolf lemma.
+				float between 0 and 1: fixed shrinkage parameter.
+				Note that shrinkage works only with ‘lsqr’ and ‘eigen’ solvers.
+		priors : array, optional, shape (n_classes,)
+			Class priors.
+		n_components : int, optional (default=None)
+				Number of components (<= min(n_classes - 1, n_features)) for dimensionality reduction. If None, will be set to min(n_classes - 1, n_features).
+		store_covariance : bool, optional
+				Additionally compute class covariance matrix (default False), used only in ‘svd’ solver.
+		tol : float, optional, (default 1.0e-4)
+
+	Examples
+
+		>>> import numpy as np
+		>>> from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+		>>> X = np.array([[-1, -1], [-2, -1], [-3, -2], [1, 1], [2, 1], [3, 2]])
+		>>> y = np.array([1, 1, 1, 2, 2, 2])
+		>>> clf = LinearDiscriminantAnalysis()
+		>>> clf.fit(X, y)  
+		LinearDiscriminantAnalysis(n_components=None, priors=None, shrinkage=None,
+              solver='svd', store_covariance=False, tol=0.0001)
+		>>> print(clf.predict([[-0.8, -1]]))
+		[1]	
+
+
+
+
+4) k-Nearest Neighbors:-
+	
+	(SOURCE: https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html )
+
+	SAMPLE:  KNeighborsClassifier(n_neighbors=5, weights=’uniform’, algorithm=’auto’, leaf_size=30, p=2, metric=’minkowski’, metric_params=None, n_jobs=None, **kwargs)
+	
+	Parameters: n_neighbors : int, optional (default = 5)
+					weights : str or callable, optional (default = ‘uniform’)
+				  ‘uniform’ : uniform weights. All points in each neighborhood are weighted equally.
+				 ‘distance’ : weight points by the inverse of their distance. in this case, closer neighbors of a query point will have a greater influence than neighbors which are further away.
+				 [callable] : a user-defined function which accepts an array of distances, and returns an array of the same shape containing the weights.
+
+	algorithm : {‘auto’, ‘ball_tree’, ‘kd_tree’, ‘brute’}, optional
+				Algorithm used to compute the nearest neighbors:
+
+				‘ball_tree’ will use BallTree
+				‘kd_tree’ will use KDTree
+				‘brute’ will use a brute-force search.
+				‘auto’ will attempt to decide the most appropriate algorithm based on the values passed to fit method.
+				Note: fitting on sparse input will override the setting of this parameter, using brute force.
+
+	leaf_size : int, optional (default = 30)
+
+	p : integer, optional (default = 2)
+	
+	metric : string or callable, default ‘minkowski’
+	
+	metric_params : dict, optional (default = None)
+	
+	n_jobs : int or None, optional (default=None)
+
+	Examples
+				>>> X = [[0], [1], [2], [3]]
+				>>> y = [0, 0, 1, 1]
+				>>> from sklearn.neighbors import KNeighborsClassifier
+				>>> neigh = KNeighborsClassifier(n_neighbors=3)
+				>>> neigh.fit(X, y) 
+				KNeighborsClassifier(...)
+				>>> print(neigh.predict([[1.1]]))
+				[0]
+				>>> print(neigh.predict_proba([[0.9]]))
+				[[0.66666667 0.33333333]]
+
+
+
+
+
+
+5) DecisionTreeClassifier:-
+
+	SOURCE:
+  		Orignial: https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html
+    	Cached: http://webcache.googleusercontent.com/search?q=cache:http://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html
+
+    SAMPLE: DecisionTreeClassifier(criterion=’gini’, splitter=’best’, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features=None, random_state=None, max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None, class_weight=None, presort=False)
+
+    Parameters:	
+    	criterion : string, optional (default=”gini”),
+    	splitter : string, optional (default=”best”),
+    	max_depth : int or None, optional (default=None),
+    	min_samples_split : int, float, optional (default=2),
+    	min_samples_leaf : int, float, optional (default=1),
+    	min_weight_fraction_leaf : float, optional (default=0.),
+    	max_features : int, float, string or None, optional (default=None),
+    		>> If int, then consider max_features features at each split.
+    		>> If float, then max_features is a fraction and int(max_features * n_features) features are considered at each split.
+    		>> If “auto”, then max_features=sqrt(n_features).
+    		>> If “sqrt”, then max_features=sqrt(n_features).
+    		>> If “log2”, then max_features=log2(n_features).
+    		>> If None, then max_features=n_features.
+				Note: the search for a split does not stop until at least one valid partition of the node samples is found, even if it requires to effectively inspect more than max_features features.
+		random_state : int, RandomState instance or None, optional (default=None),
+		max_leaf_nodes : int or None, optional (default=None),
+		min_impurity_decrease : float, optional (default=0.),
+					A node will be split if this split induces a decrease of the impurity greater than or equal to this value.
+					The weighted impurity decrease equation is the following:
+						N_t / N * (impurity - N_t_R / N_t * right_impurity - N_t_L / N_t * left_impurity)
+					where N is the total number of samples, N_t is the number of samples at the current node, N_t_L is the number of samples in the left child, and N_t_R is the number of samples in the right child.
+		min_impurity_split : float, (default=1e-7),
+		class_weight : dict, list of dicts, “balanced” or None, default=None,
+		presort : bool, optional (default=False)	
+
+	Examples
+
+		>>> from sklearn.datasets import load_iris
+		>>> from sklearn.model_selection import cross_val_score
+		>>> from sklearn.tree import DecisionTreeClassifier
+		>>> clf = DecisionTreeClassifier(random_state=0)
+		>>> iris = load_iris()
+		>>> cross_val_score(clf, iris.data, iris.target, cv=10)
+		...                             
+		...
+		array([ 1.     ,  0.93...,  0.86...,  0.93...,  0.93...,
+        		0.93...,  0.93...,  1.     ,  0.93...,  1.      ])	
+
+
+6) RandomForestClassifier:-
+	
+	SOURCE: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html
+
+	SAMPLE:  RandomForestClassifier(n_estimators=’warn’, criterion=’gini’, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features=’auto’, max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None, bootstrap=True, oob_score=False, n_jobs=None, random_state=None, verbose=0, warm_start=False, class_weight=None)
+
+	Parameters:	
+		n_estimators : integer, optional (default=10)
+			The number of trees in the forest.
+
+				Changed in version 0.20: The default value of n_estimators will change from 10 in version 0.20 to 100 in version 0.22.
+
+		criterion : string, optional (default=”gini”)
+				The function to measure the quality of a split. Supported criteria are “gini” for the Gini impurity and “entropy” for the information gain. Note: this parameter is tree-specific.
+
+		max_depth : integer or None, optional (default=None)
+				The maximum depth of the tree. If None, then nodes are expanded until all leaves are pure or until all leaves contain less than min_samples_split samples.
+
+		min_samples_split : int, float, optional (default=2)
+				The minimum number of samples required to split an internal node:
+				If int, then consider min_samples_split as the minimum number.
+				If float, then min_samples_split is a fraction and ceil(min_samples_split * n_samples) are the minimum number of samples for each split.
+				Changed in version 0.18: Added float values for fractions.
+
+		min_samples_leaf : int, float, optional (default=1)
+				The minimum number of samples required to be at a leaf node. A split point at any depth will only be considered if it leaves at least min_samples_leaf training samples in each of the left and right branches. This may have the effect of smoothing the model, especially in regression.
+				If int, then consider min_samples_leaf as the minimum number.
+				If float, then min_samples_leaf is a fraction and ceil(min_samples_leaf * n_samples) are the minimum number of samples for each node.
+				Changed in version 0.18: Added float values for fractions.
+
+		min_weight_fraction_leaf : float, optional (default=0.)
+				The minimum weighted fraction of the sum total of weights (of all the input samples) required to be at a leaf node. Samples have equal weight when sample_weight is not provided.
+
+		max_features : int, float, string or None, optional (default=”auto”)
+				The number of features to consider when looking for the best split:
+					If int, then consider max_features features at each split.
+					If float, then max_features is a fraction and int(max_features * n_features) features are considered at each split.
+					If “auto”, then max_features=sqrt(n_features).
+					If “sqrt”, then max_features=sqrt(n_features) (same as “auto”).
+					If “log2”, then max_features=log2(n_features).
+					If None, then max_features=n_features.
+				Note: the search for a split does not stop until at least one valid partition of the node samples is found, even if it requires to effectively inspect more than max_features features.
+
+		max_leaf_nodes : int or None, optional (default=None)
+				Grow trees with max_leaf_nodes in best-first fashion. Best nodes are defined as relative reduction in impurity. If None then unlimited number of leaf nodes.
+
+		min_impurity_decrease : float, optional (default=0.)
+				A node will be split if this split induces a decrease of the impurity greater than or equal to this value.
+
+			The weighted impurity decrease equation is the following:
+
+				N_t / N * (impurity - N_t_R / N_t * right_impurity
+                		    - N_t_L / N_t * left_impurity)
+			where N is the total number of samples, N_t is the number of samples at the current node, N_t_L is the number of samples in the left child, and N_t_R is the number of samples in the right child.
+
+			N, N_t, N_t_R and N_t_L all refer to the weighted sum, if sample_weight is passed.
+
+			New in version 0.19.
+
+		min_impurity_split : float, (default=1e-7)
+				Threshold for early stopping in tree growth. A node will split if its impurity is above the threshold, otherwise it is a leaf.
+
+			Deprecated since version 0.19: min_impurity_split has been deprecated in favor of min_impurity_decrease in 0.19. The default value of min_impurity_split will change from 1e-7 to 0 in 0.23 and it will be removed in 0.25. Use min_impurity_decrease instead.
+		bootstrap : boolean, optional (default=True)
+			Whether bootstrap samples are used when building trees. If False, the whole datset is used to build each tree.
+
+		oob_score : bool (default=False)
+			Whether to use out-of-bag samples to estimate the generalization accuracy.
+
+		n_jobs : int or None, optional (default=None)
+			The number of jobs to run in parallel for both fit and predict. None means 1 unless in a joblib.parallel_backend context. -1 means using all processors. See Glossary for more details.
+
+		random_state : int, RandomState instance or None, optional (default=None)
+			If int, random_state is the seed used by the random number generator; If RandomState instance, random_state is the random number generator; If None, the random number generator is the RandomState instance used by np.random.
+
+		verbose : int, optional (default=0)
+			Controls the verbosity when fitting and predicting.
+
+		warm_start : bool, optional (default=False)
+			When set to True, reuse the solution of the previous call to fit and add more estimators to the ensemble, otherwise, just fit a whole new forest. See the Glossary.
+
+		class_weight : dict, list of dicts, “balanced”, “balanced_subsample” or None, optional (default=None)
+			Weights associated with classes in the form {class_label: weight}. If not given, all classes are supposed to have weight one. For multi-output problems, a list of dicts can be provided in the same order as the columns of y.
+
+				Note that for multioutput (including multilabel) weights should be defined for each class of every column in its own dict. For example, for four-class multilabel classification weights should be [{0: 1, 1: 1}, {0: 1, 1: 5}, {0: 1, 1: 1}, {0: 1, 1: 1}] instead of [{1:1}, {2:5}, {3:1}, {4:1}].
+
+			The “balanced” mode uses the values of y to automatically adjust weights inversely proportional to class frequencies in the input data as n_samples / (n_classes * np.bincount(y))
+
+		The “balanced_subsample” mode is the same as “balanced” except that weights are computed based on the bootstrap sample for every tree grown.
+
+		For multi-output, the weights of each column of y will be multiplied.
+
+				Note that these weights will be multiplied with sample_weight (passed through the fit method) if sample_weight is specified.
+
+
+		Examples
+
+			>>> from sklearn.ensemble import RandomForestClassifier
+			>>> from sklearn.datasets import make_classification
+			>>>
+			>>> X, y = make_classification(n_samples=1000, n_features=4,
+			...                            n_informative=2, n_redundant=0,
+			...                            random_state=0, shuffle=False)
+			>>> clf = RandomForestClassifier(n_estimators=100, max_depth=2,
+			...                              random_state=0)
+			>>> clf.fit(X, y)  
+			RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
+    			        max_depth=2, max_features='auto', max_leaf_nodes=None,
+            			min_impurity_decrease=0.0, min_impurity_split=None,
+           			 min_samples_leaf=1, min_samples_split=2,
+         			   min_weight_fraction_leaf=0.0, n_estimators=100, n_jobs=None,
+        			    oob_score=False, random_state=0, verbose=0, warm_start=False)
+			>>> print(clf.feature_importances_)
+			[0.14205973 0.76664038 0.0282433  0.06305659]
+			>>> print(clf.predict([[0, 0, 0, 0]]))
+			[1]
+
+
+7) SupportVectorClassification(SVC):-
+	
+	SOURCE: https://scikit-learn.org/stable/modules/svm.html
+
+	FOR VISUALIZED THEORY, CONCEPT AND EXAMPLE REFER THE SOURCE.....
+
+8) Naive Bayes:
+	
+	SOURCE: https://scikit-learn.org/stable/modules/naive_bayes.html
+
+	FOR VISUALIZED THEORY, CONCEPT AND EXAMPLE REFER THE SOURCE.....
+
